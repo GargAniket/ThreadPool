@@ -1,4 +1,9 @@
+# **ThreadPool**
+---
+This is intended to be a demonstration of a thread pool based on Chase-Lev. Resources, documentation, configuration, and benchmarks will be added over time. This is currently a very rough draft, and the project is (over)due for some big shuffling around going forwards :D
+
 # **TODO List:**
+---
 - [X] repo structure
 - [X] implement a bounded blocking queue
 - [ ] implement Chase-Lev dequeue
@@ -9,6 +14,7 @@
 - [ ] benchmarks, flamegraphs, latency histograms, memory layout discussion, lock contention analysis, etc
 
 # **Stretch Goals:**
+---
 - [ ] NUMA-aware scheduling
 - [ ] batched task enqueue/dequeue
 - [ ] backoff strategies
@@ -17,6 +23,7 @@
 - [ ] false sharing mitigation
 
 # **Notes:** 
+---
 - [ ] how to handle memory reclamation? 
 - [ ] how to handle overflow?
 - [ ] what if consumer thread(s) are too slow/crash? 
