@@ -1,0 +1,3 @@
+/Users/aniketgarg/ThreadPool/build/CMakeFiles/ThreadPool.dir
+/Users/aniketgarg/ThreadPool/build/CMakeFiles/edit_cache.dir
+/Users/aniketgarg/ThreadPool/build/CMakeFiles/rebuild_cache.dir
