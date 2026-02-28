@@ -24,3 +24,18 @@ This is intended to be a demonstration of a thread pool based on Chase-Lev. Reso
 - [ ] how to handle overflow?
 - [ ] what if consumer thread(s) are too slow/crash? 
 - [ ] theives pop from tail, owner pops/pushes to bottom 
+
+# **Design Decsions:**
+- Chase-Lev Deque
+    - use fixed-size backing array --> must implement backoff strategy, dont want to deal with resizing since it can lead to issues if consumer thread(s) crash or too many tasks pushed, also deterministic since no heap allocation
+    - arithmetic and-based indexing --> faster than modulo (compiler optimizations could also do this for you)
+
+# **Microbenchmarks:**
+- [ ] single worker --> measure ns per push/pop vs mutex queue, mpmc queue, chase lev deque
+- [ ] 1 producer worker + N thieves --> preload 1M tasks + measure steals/sec as N increases 
+- [ ] collect per-task execution latency (p50, p90, p99, p99.9, max)
+- [ ] collect LLC misses
+- [ ] collect branch mispredicts
+- [ ] collect CAS failure rate
+- [ ] collect context switches 
+- [ ] plot throughput vs threads (linear region, saturation point, contention cliff)

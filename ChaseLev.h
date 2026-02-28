@@ -8,55 +8,95 @@ private:
     alignas(64) std::atomic<int> head_; 
     alignas(64) std::atomic<int> tail_; 
     int capacity_; 
+    int mask_; 
 
 public:
     ChaseLev(int size) : capacity_(size), head_(0), tail_(0) {
+        assert( (capacity_ > 0) && ((capacity_ & (capacity_ - 1)) == 0) && "size must be non-zero power of two" ); 
+        mask_ = capacity_ - 1; 
         data_.resize(capacity_); 
     }
 
     /**
      * @brief Push to bottom/tail
      * 
+     * Used by "owner" thread
+     * 
      * @param item The item to push
      * @return The success of the operation 
      */
     bool try_pushTail(T item) {
         int curr_tail = tail_.load(std::memory_order_relaxed); 
-        int next_tail = (curr_tail + 1) % capacity_; 
-        if ( next_tail == head_.load(std::memory_order_acquire) ) {
-            return false; 
+        int curr_head = head_.load(std::memory_order_acquire); 
+        if ( curr_tail - curr_head >= capacity_ ) {
+            return false;   // full
         }
-        data_[curr_tail] = item; 
-        // memory_order_release so writing to data_ before tail_ update
-        tail_.store(next_tail, std::memory_order_release); 
+        data_[curr_tail & mask_] = item; 
+        tail_.store(curr_tail + 1, std::memory_order_release); 
         return true; 
     }
 
     /**
      * @brief Pop from bottom/tail
      * 
+     * Used by "owner" thread
+     * 
      * @param item The item to pop
      * @return The success of the operation
      */
     bool try_popTail(T& item) {
+        int curr_tail = tail_.load(std::memory_order_relaxed) - 1; 
+        tail_.store(curr_tail, std::memory_order_relaxed); 
+
+        int curr_head = head_.load(std::memory_order_acquire); 
+        int size = curr_tail - curr_head; 
+
+        // empty
+        if ( size < 0 ) {
+            return false; 
+        }
+        // space exists to pop
+        if ( size > 0 ) { 
+            item = data_[curr_tail & mask_];
+            return true; 
+        } 
+        // single element left (top/head == bottom/tail)
+        // use CAS to resolve race between thief thread(s) popping from top/head and owner thread popping from bottom/tail
+        if ( head_.compare_exchange_strong(curr_head, curr_head + 1, 
+                                           std::memory_order_acq_rel, 
+                                           std::memory_order_relaxed) ) {   // should this be std::memory_order_acquire or std::memory_order_relaxed ?
+            tail_.store(curr_head + 1, std::memory_order_relaxed); 
+            item = data_[curr_tail & mask_];
+            return true; 
+        } else {
+            tail_.store(curr_head + 1, std::memory_order_relaxed); 
+            return false; 
+        }
 
     }
 
     /**
      * @brief Steal from top/head
      * 
+     * Used by "thief" threads
+     * 
      * @param item The item to pop
      * @return The success of the operation
      */
     bool try_popHead(T& item) {
-        int curr_head = head_.load(std::memory_order_relaxed); 
-        if ( curr_head == tail_.load(std::memory_order_acquire) ) {
-            return false; 
-        } 
-        item = data_[curr_head]; 
-        int new_head = (curr_head + 1) % capacity_; 
-        // memory_order_release so reading from data_ before head_ update 
-        head_.store(new_head, std::memory_order_release); 
-        return true; 
+        int curr_head = head_.load(std::memory_order_acquire); 
+        int curr_tail = tail_.load(std::memory_order_acquire); 
+        if ( curr_head >= curr_tail ) {
+            return false;   // empty
+        }
+        // use CAS to resolve race between multiple thief threads colliding/popping from same top/head
+        if ( head_.compare_exchange_strong(curr_head, curr_head+1, 
+                                           std::memory_order_acq_rel, 
+                                           std::memory_order_relaxed) ) {   // should this be std::memory_order_acquire or std::memory_order_relaxed ?
+            item = data_[curr_head & mask_]; 
+            return true; 
+        } else {
+            return false;   // retry
+        }
     }
 };
