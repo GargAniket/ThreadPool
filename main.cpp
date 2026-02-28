@@ -9,15 +9,20 @@
 
 #include "LockingQueue.h"
 #include "AtomicQueue.h"
+#include "ChaseLev.h"
 
 LockingQueue<int> locking_queue(1 << 8);
 AtomicQueue<int> atomic_queue(1 << 8); 
+ChaseLev<int> cl_queue(1 << 8); 
 
 std::vector<int> enqueue1; 
 std::vector<int> dequeue1; 
 
 std::vector<int> enqueue2; 
 std::vector<int> dequeue2; 
+
+std::vector<int> enqueue3; 
+std::vector<int> dequeue3; 
 
 double average_of_greatest_n(std::vector<int> vec, size_t top_n) {
     if (vec.size() < top_n) {
@@ -108,7 +113,7 @@ void test1() {
         locking_queue.enqueue(10); 
         auto stop = std::chrono::high_resolution_clock::now(); 
         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count();
-        enqueue1.push_back(duration); 
+        enqueue1[i] = duration; 
     }
 }
 
@@ -119,7 +124,7 @@ void test2() {
         locking_queue.dequeue(r); 
         auto stop = std::chrono::high_resolution_clock::now(); 
         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count();
-        dequeue1.push_back(duration); 
+        dequeue1[i] = duration; 
     }
 }
 
@@ -129,7 +134,7 @@ void test3() {
         atomic_queue.try_enqueue(10);
         auto stop = std::chrono::high_resolution_clock::now(); 
         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count();
-        enqueue2.push_back(duration); 
+        enqueue2[i] = duration; 
     }
 }
 
@@ -140,12 +145,50 @@ void test4() {
         atomic_queue.try_dequeue(r); 
         auto stop = std::chrono::high_resolution_clock::now(); 
         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count();
-        dequeue2.push_back(duration); 
+        dequeue2[i] = duration; 
     }
 }
 
+void test5() {
+    for (int i = 0; i < (1 << 8); i++) {
+        auto start = std::chrono::high_resolution_clock::now(); 
+        cl_queue.try_pushTail(10);
+        auto stop = std::chrono::high_resolution_clock::now(); 
+        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count();
+        enqueue3[i] = duration; 
+    }
+
+    int r;
+    for (int i = (1 << 7); i < (1 << 8); i++) {
+        auto start = std::chrono::high_resolution_clock::now(); 
+        cl_queue.try_popTail(r); 
+        auto stop = std::chrono::high_resolution_clock::now(); 
+        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count();
+        dequeue3[i] = duration; 
+    }
+}
+
+void test6() {
+    int r;
+    for (int i = 0; i < (1 << 7); i++) {
+        auto start = std::chrono::high_resolution_clock::now(); 
+        cl_queue.try_popHead(r); 
+        auto stop = std::chrono::high_resolution_clock::now(); 
+        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count();
+        dequeue3[i] = duration; 
+    }
+}
 
 int main() {
+
+    enqueue1.resize(1 << 8); 
+    enqueue2.resize(1 << 8); 
+    enqueue3.resize(1 << 8); 
+
+    dequeue1.resize(1 << 8); 
+    dequeue2.resize(1 << 8); 
+    dequeue3.resize(1 << 8); 
+
     std::cout << "hello world" << std::endl;  
 
     std::thread t1(test1); 
@@ -160,25 +203,37 @@ int main() {
     t3.join(); 
     t4.join();
 
+    std::thread t5(test5); 
+    std::thread t6(test6);
+
+    t5.join(); 
+    t6.join();
+
     const size_t top_n = .01 * (1 << 8); 
     std::cout << average_of_greatest_n(enqueue1, top_n) << std::endl; 
     std::cout << average_of_greatest_n(dequeue1, top_n) << std::endl; 
     std::cout << average_of_greatest_n(enqueue2, top_n) << std::endl; 
     std::cout << average_of_greatest_n(dequeue2, top_n) << std::endl; 
+    std::cout << average_of_greatest_n(enqueue3, top_n) << std::endl; 
+    std::cout << average_of_greatest_n(dequeue3, top_n) << std::endl; 
 
     std::cout << "goodbye world" << std::endl; 
 
     std::sort(enqueue1.begin(), enqueue1.end(), std::greater<int>()); 
     std::sort(enqueue2.begin(), enqueue2.end(), std::greater<int>()); 
+    std::sort(enqueue3.begin(), enqueue3.end(), std::greater<int>()); 
     std::sort(dequeue1.begin(), dequeue1.end(), std::greater<int>()); 
     std::sort(dequeue2.begin(), dequeue2.end(), std::greater<int>()); 
+    std::sort(dequeue3.begin(), dequeue3.end(), std::greater<int>()); 
 
     displayHistogram(enqueue1, "blocking enqueue"); 
     displayHistogram(enqueue2, "atomic enqueue"); 
+    displayHistogram(enqueue3, "chase lev enqueue"); 
     displayHistogram(dequeue1, "blocking dequeue"); 
     displayHistogram(dequeue2, "atomic dequeue"); 
+    displayHistogram(dequeue3, "chase lev dequeue"); 
 
-   cv::waitKey(0); 
+    cv::waitKey(0); 
 
-   return 0; 
+    return 0; 
 }

@@ -39,3 +39,8 @@ This is intended to be a demonstration of a thread pool based on Chase-Lev. Reso
 - [ ] collect CAS failure rate
 - [ ] collect context switches 
 - [ ] plot throughput vs threads (linear region, saturation point, contention cliff)
+
+# **Debugging:**
+-fsanitize=address
+-fsanitize=thread
+-O1 (not O3)
