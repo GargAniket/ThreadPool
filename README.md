@@ -31,6 +31,7 @@ This is intended to be a demonstration of a thread pool based on Chase-Lev. Reso
     - arithmetic and-based indexing --> faster than modulo (compiler optimizations could also do this for you)
 
 # **Microbenchmarks:**
+- [ ] single owner + 3 thief threads + fixed capacity of 8 + push integers. Track atomic counter of items produced, atomic counter of items consumed, and bitmap to ensure no duplicates 
 - [ ] single worker --> measure ns per push/pop vs mutex queue, mpmc queue, chase lev deque
 - [ ] 1 producer worker + N thieves --> preload 1M tasks + measure steals/sec as N increases 
 - [ ] collect per-task execution latency (p50, p90, p99, p99.9, max)
@@ -44,3 +45,23 @@ This is intended to be a demonstration of a thread pool based on Chase-Lev. Reso
 -fsanitize=address
 -fsanitize=thread
 -O1 (not O3)
+
+# **Standard Build:** 
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build .
+
+# **Debug Build with Sanitizers:**
+cmake .. \
+  -DCMAKE_BUILD_TYPE=Debug \
+  -DWS_ENABLE_SANITIZERS=ON
+
+cmake --build .
+
+# **Run Tests:**
+./examples/example_map_reduce
+./examples/example_recursive_fib
+./examples/example_parallel_quicksort
+./tests/ws_tests
+./benchmarks/ws_benchmarks
+./apps/histogram_app

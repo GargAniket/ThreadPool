@@ -1,0 +1,8 @@
+add_executable(example_parallel_quicksort parallel_quicksort.cpp)
+target_link_libraries(example_parallel_quicksort PRIVATE ws)
+
+add_executable(example_recursive_fib recursive_fib.cpp)
+target_link_libraries(example_recursive_fib PRIVATE ws)
+
+add_executable(example_map_reduce map_reduce.cpp)
+target_link_libraries(example_map_reduce PRIVATE ws)

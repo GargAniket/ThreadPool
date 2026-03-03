@@ -1,7 +1,11 @@
 {
 	"InstallScripts" : 
 	[
-		"/Users/aniketgarg/ThreadPool/build/cmake_install.cmake"
+		"/Users/aniketgarg/ThreadPool/build/cmake_install.cmake",
+		"/Users/aniketgarg/ThreadPool/build/tests/cmake_install.cmake",
+		"/Users/aniketgarg/ThreadPool/build/benchmarks/cmake_install.cmake",
+		"/Users/aniketgarg/ThreadPool/build/examples/cmake_install.cmake",
+		"/Users/aniketgarg/ThreadPool/build/apps/cmake_install.cmake"
 	],
 	"Parallel" : false
 }

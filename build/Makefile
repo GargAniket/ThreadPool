@@ -65,6 +65,16 @@ CMAKE_BINARY_DIR = /Users/aniketgarg/ThreadPool/build
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running tests..."
+	/opt/homebrew/bin/ctest $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+.PHONY : test/fast
+
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
@@ -117,89 +127,215 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named ThreadPool
+# Target rules for targets named ws
 
 # Build rule for target.
-ThreadPool: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ThreadPool
-.PHONY : ThreadPool
+ws: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ws
+.PHONY : ws
 
 # fast build rule for target.
-ThreadPool/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ThreadPool.dir/build.make CMakeFiles/ThreadPool.dir/build
-.PHONY : ThreadPool/fast
+ws/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ws.dir/build.make CMakeFiles/ws.dir/build
+.PHONY : ws/fast
 
-AtomicQueue.o: AtomicQueue.cpp.o
-.PHONY : AtomicQueue.o
+#=============================================================================
+# Target rules for targets named ws_tests
+
+# Build rule for target.
+ws_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ws_tests
+.PHONY : ws_tests
+
+# fast build rule for target.
+ws_tests/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/ws_tests.dir/build.make tests/CMakeFiles/ws_tests.dir/build
+.PHONY : ws_tests/fast
+
+#=============================================================================
+# Target rules for targets named ws_benchmarks
+
+# Build rule for target.
+ws_benchmarks: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ws_benchmarks
+.PHONY : ws_benchmarks
+
+# fast build rule for target.
+ws_benchmarks/fast:
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/ws_benchmarks.dir/build.make benchmarks/CMakeFiles/ws_benchmarks.dir/build
+.PHONY : ws_benchmarks/fast
+
+#=============================================================================
+# Target rules for targets named example_parallel_quicksort
+
+# Build rule for target.
+example_parallel_quicksort: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 example_parallel_quicksort
+.PHONY : example_parallel_quicksort
+
+# fast build rule for target.
+example_parallel_quicksort/fast:
+	$(MAKE) $(MAKESILENT) -f examples/CMakeFiles/example_parallel_quicksort.dir/build.make examples/CMakeFiles/example_parallel_quicksort.dir/build
+.PHONY : example_parallel_quicksort/fast
+
+#=============================================================================
+# Target rules for targets named example_recursive_fib
+
+# Build rule for target.
+example_recursive_fib: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 example_recursive_fib
+.PHONY : example_recursive_fib
+
+# fast build rule for target.
+example_recursive_fib/fast:
+	$(MAKE) $(MAKESILENT) -f examples/CMakeFiles/example_recursive_fib.dir/build.make examples/CMakeFiles/example_recursive_fib.dir/build
+.PHONY : example_recursive_fib/fast
+
+#=============================================================================
+# Target rules for targets named example_map_reduce
+
+# Build rule for target.
+example_map_reduce: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 example_map_reduce
+.PHONY : example_map_reduce
+
+# fast build rule for target.
+example_map_reduce/fast:
+	$(MAKE) $(MAKESILENT) -f examples/CMakeFiles/example_map_reduce.dir/build.make examples/CMakeFiles/example_map_reduce.dir/build
+.PHONY : example_map_reduce/fast
+
+#=============================================================================
+# Target rules for targets named histogram_app
+
+# Build rule for target.
+histogram_app: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 histogram_app
+.PHONY : histogram_app
+
+# fast build rule for target.
+histogram_app/fast:
+	$(MAKE) $(MAKESILENT) -f apps/CMakeFiles/histogram_app.dir/build.make apps/CMakeFiles/histogram_app.dir/build
+.PHONY : histogram_app/fast
+
+src/AtomicQueue.o: src/AtomicQueue.cpp.o
+.PHONY : src/AtomicQueue.o
 
 # target to build an object file
-AtomicQueue.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ThreadPool.dir/build.make CMakeFiles/ThreadPool.dir/AtomicQueue.cpp.o
-.PHONY : AtomicQueue.cpp.o
+src/AtomicQueue.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ws.dir/build.make CMakeFiles/ws.dir/src/AtomicQueue.cpp.o
+.PHONY : src/AtomicQueue.cpp.o
 
-AtomicQueue.i: AtomicQueue.cpp.i
-.PHONY : AtomicQueue.i
+src/AtomicQueue.i: src/AtomicQueue.cpp.i
+.PHONY : src/AtomicQueue.i
 
 # target to preprocess a source file
-AtomicQueue.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ThreadPool.dir/build.make CMakeFiles/ThreadPool.dir/AtomicQueue.cpp.i
-.PHONY : AtomicQueue.cpp.i
+src/AtomicQueue.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ws.dir/build.make CMakeFiles/ws.dir/src/AtomicQueue.cpp.i
+.PHONY : src/AtomicQueue.cpp.i
 
-AtomicQueue.s: AtomicQueue.cpp.s
-.PHONY : AtomicQueue.s
+src/AtomicQueue.s: src/AtomicQueue.cpp.s
+.PHONY : src/AtomicQueue.s
 
 # target to generate assembly for a file
-AtomicQueue.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ThreadPool.dir/build.make CMakeFiles/ThreadPool.dir/AtomicQueue.cpp.s
-.PHONY : AtomicQueue.cpp.s
+src/AtomicQueue.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ws.dir/build.make CMakeFiles/ws.dir/src/AtomicQueue.cpp.s
+.PHONY : src/AtomicQueue.cpp.s
 
-LockingQueue.o: LockingQueue.cpp.o
-.PHONY : LockingQueue.o
+src/ChaseLev.o: src/ChaseLev.cpp.o
+.PHONY : src/ChaseLev.o
 
 # target to build an object file
-LockingQueue.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ThreadPool.dir/build.make CMakeFiles/ThreadPool.dir/LockingQueue.cpp.o
-.PHONY : LockingQueue.cpp.o
+src/ChaseLev.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ws.dir/build.make CMakeFiles/ws.dir/src/ChaseLev.cpp.o
+.PHONY : src/ChaseLev.cpp.o
 
-LockingQueue.i: LockingQueue.cpp.i
-.PHONY : LockingQueue.i
+src/ChaseLev.i: src/ChaseLev.cpp.i
+.PHONY : src/ChaseLev.i
 
 # target to preprocess a source file
-LockingQueue.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ThreadPool.dir/build.make CMakeFiles/ThreadPool.dir/LockingQueue.cpp.i
-.PHONY : LockingQueue.cpp.i
+src/ChaseLev.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ws.dir/build.make CMakeFiles/ws.dir/src/ChaseLev.cpp.i
+.PHONY : src/ChaseLev.cpp.i
 
-LockingQueue.s: LockingQueue.cpp.s
-.PHONY : LockingQueue.s
+src/ChaseLev.s: src/ChaseLev.cpp.s
+.PHONY : src/ChaseLev.s
 
 # target to generate assembly for a file
-LockingQueue.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ThreadPool.dir/build.make CMakeFiles/ThreadPool.dir/LockingQueue.cpp.s
-.PHONY : LockingQueue.cpp.s
+src/ChaseLev.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ws.dir/build.make CMakeFiles/ws.dir/src/ChaseLev.cpp.s
+.PHONY : src/ChaseLev.cpp.s
 
-main.o: main.cpp.o
-.PHONY : main.o
+src/LockingQueue.o: src/LockingQueue.cpp.o
+.PHONY : src/LockingQueue.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ThreadPool.dir/build.make CMakeFiles/ThreadPool.dir/main.cpp.o
-.PHONY : main.cpp.o
+src/LockingQueue.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ws.dir/build.make CMakeFiles/ws.dir/src/LockingQueue.cpp.o
+.PHONY : src/LockingQueue.cpp.o
 
-main.i: main.cpp.i
-.PHONY : main.i
+src/LockingQueue.i: src/LockingQueue.cpp.i
+.PHONY : src/LockingQueue.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ThreadPool.dir/build.make CMakeFiles/ThreadPool.dir/main.cpp.i
-.PHONY : main.cpp.i
+src/LockingQueue.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ws.dir/build.make CMakeFiles/ws.dir/src/LockingQueue.cpp.i
+.PHONY : src/LockingQueue.cpp.i
 
-main.s: main.cpp.s
-.PHONY : main.s
+src/LockingQueue.s: src/LockingQueue.cpp.s
+.PHONY : src/LockingQueue.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ThreadPool.dir/build.make CMakeFiles/ThreadPool.dir/main.cpp.s
-.PHONY : main.cpp.s
+src/LockingQueue.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ws.dir/build.make CMakeFiles/ws.dir/src/LockingQueue.cpp.s
+.PHONY : src/LockingQueue.cpp.s
+
+src/thread_pool.o: src/thread_pool.cpp.o
+.PHONY : src/thread_pool.o
+
+# target to build an object file
+src/thread_pool.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ws.dir/build.make CMakeFiles/ws.dir/src/thread_pool.cpp.o
+.PHONY : src/thread_pool.cpp.o
+
+src/thread_pool.i: src/thread_pool.cpp.i
+.PHONY : src/thread_pool.i
+
+# target to preprocess a source file
+src/thread_pool.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ws.dir/build.make CMakeFiles/ws.dir/src/thread_pool.cpp.i
+.PHONY : src/thread_pool.cpp.i
+
+src/thread_pool.s: src/thread_pool.cpp.s
+.PHONY : src/thread_pool.s
+
+# target to generate assembly for a file
+src/thread_pool.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ws.dir/build.make CMakeFiles/ws.dir/src/thread_pool.cpp.s
+.PHONY : src/thread_pool.cpp.s
+
+src/worker.o: src/worker.cpp.o
+.PHONY : src/worker.o
+
+# target to build an object file
+src/worker.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ws.dir/build.make CMakeFiles/ws.dir/src/worker.cpp.o
+.PHONY : src/worker.cpp.o
+
+src/worker.i: src/worker.cpp.i
+.PHONY : src/worker.i
+
+# target to preprocess a source file
+src/worker.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ws.dir/build.make CMakeFiles/ws.dir/src/worker.cpp.i
+.PHONY : src/worker.cpp.i
+
+src/worker.s: src/worker.cpp.s
+.PHONY : src/worker.s
+
+# target to generate assembly for a file
+src/worker.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ws.dir/build.make CMakeFiles/ws.dir/src/worker.cpp.s
+.PHONY : src/worker.cpp.s
 
 # Help Target
 help:
@@ -209,16 +345,29 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... ThreadPool"
-	@echo "... AtomicQueue.o"
-	@echo "... AtomicQueue.i"
-	@echo "... AtomicQueue.s"
-	@echo "... LockingQueue.o"
-	@echo "... LockingQueue.i"
-	@echo "... LockingQueue.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... test"
+	@echo "... example_map_reduce"
+	@echo "... example_parallel_quicksort"
+	@echo "... example_recursive_fib"
+	@echo "... histogram_app"
+	@echo "... ws"
+	@echo "... ws_benchmarks"
+	@echo "... ws_tests"
+	@echo "... src/AtomicQueue.o"
+	@echo "... src/AtomicQueue.i"
+	@echo "... src/AtomicQueue.s"
+	@echo "... src/ChaseLev.o"
+	@echo "... src/ChaseLev.i"
+	@echo "... src/ChaseLev.s"
+	@echo "... src/LockingQueue.o"
+	@echo "... src/LockingQueue.i"
+	@echo "... src/LockingQueue.s"
+	@echo "... src/thread_pool.o"
+	@echo "... src/thread_pool.i"
+	@echo "... src/thread_pool.s"
+	@echo "... src/worker.o"
+	@echo "... src/worker.i"
+	@echo "... src/worker.s"
 .PHONY : help
 
 

@@ -1,0 +1,3 @@
+void scaling_bench() {
+    
+}

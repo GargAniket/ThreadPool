@@ -1,0 +1,2 @@
+/usr/bin/ar qc libws.a CMakeFiles/ws.dir/src/AtomicQueue.cpp.o CMakeFiles/ws.dir/src/ChaseLev.cpp.o CMakeFiles/ws.dir/src/LockingQueue.cpp.o CMakeFiles/ws.dir/src/thread_pool.cpp.o CMakeFiles/ws.dir/src/worker.cpp.o
+/usr/bin/ranlib libws.a
